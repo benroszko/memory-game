@@ -1,0 +1,40 @@
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto; }
+
+.display-1 {
+  background-color: #e9ecef;
+  font-family: fantasy;
+  font-size: 8rem;
+  font-weight: 300;
+  line-height: 1.2;
+  text-align: center;
+  border-bottom: 2px solid black; }
+
+.memory-title {
+  color: black;
+  cursor: pointer; }
+
+@keyframes color-change {
+  from {
+    color: black; }
+  to {
+    color: blue; } }
+  .memory-title:hover {
+    color: blue;
+    text-decoration: none;
+    animation-name: color-change;
+    animation-duration: .3s; }
+
+.card-transition {
+  width: 400px;
+  transition: transform .5s;
+  cursor: pointer; }
+  .card-transition:nth-child(2) {
+    margin-left: auto; }
+  .card-transition:hover {
+    transform: scale(1.1);
+    border: 3px solid blue; }
