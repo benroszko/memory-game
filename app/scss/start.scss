@@ -4,10 +4,8 @@ $detail-color: blue;
 
 .container {
 	width: 100%;
-	padding-right: 15px;
-	padding-left: 15px;
-	margin-right: auto;
-	margin-left: auto;
+	padding: 0 15px;
+	margin: 0 auto;
 }
 
 .display-1 {
@@ -41,10 +39,22 @@ $detail-color: blue;
 	}
 }
 
-.card-transition {
-	width: 400px;
-	transition: transform .5s;
+.card {
 	cursor: pointer;
+	position: relative;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-direction: column;
+	flex-direction: column;
+	width: 400px;
+	min-width: 0;
+	word-wrap: break-word;
+	background-color: #fff;
+	background-clip: border-box;
+	border: 1px solid rgba(0, 0, 0, .125);
+	border-radius: .25rem;
+	margin-bottom: 25px;
+	transition: transform .5s;
 
 	&:nth-child(2) {
 		margin-left: auto;
@@ -53,5 +63,9 @@ $detail-color: blue;
 	&:hover {
 		transform: scale(1.1);
 		border: 3px solid $detail-color;
+	}
+
+	&:active {
+		cursor: not-allowed;
 	}
 }

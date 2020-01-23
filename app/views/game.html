@@ -9,9 +9,21 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="game.js"></script>
     <title>Memory - New Game</title>
 </head>
 <body>
+    <h1>New Game!</h1>
+    <select class="form-control" required>
+        <option value="" selected disabled hidden>Choose here</option>
+        <option value="easy">Easy (4x4)</option>
+        <option value="medium">Medium (6x6)</option>
+        <option value="hard">Hard (8x8)</option>
+    </select>
+    <input class="btn btn-primary" type="button" value="Confirm">
+    <table class="board">
+    </table>
+    
+    <script src="game.js" type="module" defer></script>
+    <script src="board.js" type="module" defer></script>
 </body>
 </html>
