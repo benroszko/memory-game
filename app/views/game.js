@@ -1,4 +1,4 @@
-import { loadBoard } from './board.js';
+import { loadBoard, loadTimer, loadScoreCounter } from './board.js';
 
 window.onload = () => {
 	const select = document.getElementsByClassName('form-control')[0];
@@ -27,6 +27,8 @@ window.onload = () => {
 		if (chosen) {
 			btn.disabled = select.disabled = true;
 			loadBoard(dimension);
+			loadTimer();
+			loadScoreCounter();
 		}
 	});
 };
