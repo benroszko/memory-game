@@ -12,7 +12,10 @@
     <title>Memory - New Game</title>
 </head>
 <body>
-    <h1>New Game!</h1>
+    <script src="/node_modules/firebase/firebase-app.js"></script>
+    <script src="/node_modules/firebase/firebase-auth.js"></script>
+    <script src="/node_modules/firebase/firebase-firestore.js"></script>
+    <h1><a href="game.html" class="memory-title">New Game!</a></h1>
     <select class="form-control" required>
         <option value="" selected disabled hidden>Choose here</option>
         <option value="easy">Easy (4x4)</option>
@@ -21,14 +24,13 @@
     </select>
     <input class="btn btn-primary" type="button" value="Confirm">
     <div class="container">
+        <p class="display-4 text-center timer" hidden>Time: 0</p>
         <div class="row">
-            <p class="display-4 timer" hidden>Time: 0</p>
             <table align="center" class="board"></table>    
-            <p class="display-4 score-counter" hidden>Points: 0</p>
         </div> 
+
     </div>
     
     <script src="game.js" type="module" defer></script>
-    <script src="board.js" type="module" defer></script>
 </body>
 </html>

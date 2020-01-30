@@ -1,3 +1,5 @@
+import { addScoreToDb } from './dbConnector.js';
+
 const imgMap = new Map();
 let prevImg;
 const coveredImg = '../img/game/covered.jpg';
@@ -7,7 +9,6 @@ let timeCounter;
 let alreadyGuessed;
 
 let uncovered = 0;
-let playerScore = 0;
 
 function fillWithPaths(arr, length) {
 	for (let i = 1; i <= length; i++) {
@@ -33,9 +34,21 @@ function fillImgMap(size) {
 	}
 }
 
+function convertToLevel(boardSize) {
+	if (boardSize === 4) return 'EASY';
+	else if (boardSize === 6) return 'MEDIUM';
+	else return 'HARD';
+}
+
 function endGame() {
 	clearInterval(timeIntervalId);
-	console.log('Your time is: ', timeCounter);
+	const promptTxt = `Congratulations! Your time is: ${timeCounter}!\nPlease, enter your name: `;
+	const defaultName = 'Your name...';
+	let playerName;
+	do {
+		playerName = prompt(promptTxt, defaultName);
+	} while (!playerName || playerName === 'Your name...');
+	addScoreToDb(playerName, timeCounter, convertToLevel(Math.sqrt(imgMap.size)));
 }
 
 function check(img) {
@@ -57,7 +70,6 @@ const setImg = (td, index) => {
 				uncovered++;
 				setTimeout(() => {
 					if (check(img)) {
-						playerScore++;
 						img.src = prevImg.src = guessedImg;
 						cell.guessed = true;
 						if (!--alreadyGuessed) {
@@ -66,7 +78,6 @@ const setImg = (td, index) => {
 					} else {
 						img.src = prevImg.src = coveredImg;
 					}
-					console.log(playerScore);
 					uncovered = 0;
 				}, 1000);
 			}
@@ -103,11 +114,7 @@ function loadTimer() {
 	timer.hidden = false;
 	timeIntervalId = setInterval(() => {
 		timer.textContent = timerTextContent + ++timeCounter;
-		// timeCounter++;
 	}, 1000);
 }
 
-function loadScoreCounter() {}
-// [ ...document.getElementsByClassName('display-3') ].forEach((el) => (el.hidden = false));
-
-export { loadBoard, loadTimer, loadScoreCounter };
+export { loadBoard, loadTimer };
