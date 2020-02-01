@@ -1,0 +1,6 @@
+.nav-link {
+  display: block;
+  padding: .5rem 1rem; }
+  .nav-link:focus, .nav-link:hover {
+    text-decoration: none;
+    cursor: pointer; }
