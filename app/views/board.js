@@ -47,7 +47,7 @@ function endGame() {
 	let playerName;
 	do {
 		playerName = prompt(promptTxt, defaultName);
-	} while (!playerName || playerName === 'Your name...');
+	} while (!playerName || playerName === defaultName);
 	addScoreToDb(playerName, timeCounter, convertToLevel(Math.sqrt(imgMap.size)));
 }
 
