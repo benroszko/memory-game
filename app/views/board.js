@@ -4,6 +4,7 @@ const imgMap = new Map();
 let prevImg;
 const coveredImg = '../img/game/covered.jpg';
 const guessedImg = '../img/game/guessed.jpg';
+const progressBar = document.getElementsByClassName('progress-bar')[0];
 let timeIntervalId;
 let timeCounter;
 let alreadyGuessed;
@@ -42,13 +43,15 @@ function convertToLevel(boardSize) {
 
 function endGame() {
 	clearInterval(timeIntervalId);
-	const promptTxt = `Congratulations! Your time is: ${timeCounter}!\nPlease, enter your name: `;
-	const defaultName = 'Your name...';
-	let playerName;
-	do {
-		playerName = prompt(promptTxt, defaultName);
-	} while (!playerName || playerName === defaultName);
-	addScoreToDb(playerName, timeCounter, convertToLevel(Math.sqrt(imgMap.size)));
+	setTimeout(() => {
+		const promptTxt = `Congratulations! Your time is: ${timeCounter}!\nPlease, enter your name: `;
+		const defaultName = 'Your name...';
+		let playerName;
+		do {
+			playerName = prompt(promptTxt, defaultName);
+		} while (!playerName || playerName === defaultName);
+		addScoreToDb(playerName, timeCounter, convertToLevel(Math.sqrt(imgMap.size)));
+	}, 1000);
 }
 
 function check(img) {
@@ -72,14 +75,18 @@ const setImg = (td, index) => {
 					if (check(img)) {
 						img.src = prevImg.src = guessedImg;
 						cell.guessed = true;
-						if (!--alreadyGuessed) {
+						console.log(--alreadyGuessed, imgMap.size / 2);
+						const progress = 100 * (1 - alreadyGuessed / (imgMap.size / 2));
+						console.log(progress);
+						progressBar.style.width = progressBar.textContent = progress + '%';
+						if (!alreadyGuessed) {
 							endGame();
 						}
 					} else {
 						img.src = prevImg.src = coveredImg;
 					}
 					uncovered = 0;
-				}, 1000);
+				}, 700);
 			}
 		}
 	});
@@ -105,6 +112,7 @@ function loadBoard(size) {
 		createRow(tr, size, i * size);
 		board.appendChild(tr);
 	}
+	document.getElementsByClassName('progress')[0].style.display = 'block';
 }
 
 function loadTimer() {

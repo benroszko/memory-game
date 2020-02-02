@@ -1,3 +1,6 @@
+$spinner-width: 100px;
+$spinner-height: 100px;
+
 .nav-link {
 	display: block;
 	padding: .5rem 1rem;
@@ -7,4 +10,14 @@
 		text-decoration: none;
 		cursor: pointer;
 	}
+}
+
+.spinner {
+	display: block;
+	position: fixed;
+	height: $spinner-height;
+	width: $spinner-width;
+	z-index: 1031;
+	top: calc(50% - (#{$spinner-height} / 2));
+	right: calc(50% - (#{$spinner-width} / 2));
 }

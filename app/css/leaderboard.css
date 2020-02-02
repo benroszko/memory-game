@@ -4,3 +4,12 @@
   .nav-link:focus, .nav-link:hover {
     text-decoration: none;
     cursor: pointer; }
+
+.spinner {
+  display: block;
+  position: fixed;
+  height: 100px;
+  width: 100px;
+  z-index: 1031;
+  top: calc(50% - (100px / 2));
+  right: calc(50% - (100px / 2)); }

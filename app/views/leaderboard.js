@@ -33,7 +33,6 @@ function displayScores(scores) {
 			tdsArr[2].textContent = bestScores[i - 1]['time'];
 			tdsArr[3].textContent = new Date(bestScores[i - 1]['date'].seconds * 1000).toLocaleDateString();
 		}
-		//TODO: display table-rows
 	}
 }
 
@@ -53,6 +52,10 @@ function changeViewOnNavTabClick(scores) {
 	});
 }
 window.onload = async () => {
+	setTimeout(() => {
+		document.getElementsByClassName('spinner')[0].style.display = 'none';
+		document.getElementsByClassName('table-responsive')[0].style.display = 'block';
+	}, 1000);
 	const scores = await loadFromDb();
 	console.log(scores);
 	changeViewOnNavTabClick(scores);
