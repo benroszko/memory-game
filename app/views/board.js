@@ -41,6 +41,17 @@ function convertToLevel(boardSize) {
 	else return 'HARD';
 }
 
+function showPlayAgainBtn() {
+	const playAgainBtn = document.getElementById('play-again');
+	playAgainBtn.hidden = false;
+	playAgainBtn.addEventListener('click', () => {
+		//reset progressBar();
+		//clearBoard(); or reloadBorad()
+		loadBoard();
+		loadTimer();
+	});
+}
+
 function endGame() {
 	clearInterval(timeIntervalId);
 	setTimeout(() => {
@@ -51,6 +62,7 @@ function endGame() {
 			playerName = prompt(promptTxt, defaultName);
 		} while (!playerName || playerName === defaultName);
 		addScoreToDb(playerName, timeCounter, convertToLevel(Math.sqrt(imgMap.size)));
+		showPlayAgainBtn();
 	}, 1000);
 }
 
