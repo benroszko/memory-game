@@ -1,19 +1,41 @@
+$header-width: 464px;
+$img-size: 50px;
+$gap: 20px;
+
 th,
 td {
 	margin: 5px;
 }
 
 img {
-	width: 50px;
-	height: 50px;
+	width: $img-size;
+	height: $img-size;
 }
 
 .container {
-	width: 100%;
 	padding: 0 15px;
-	margin: 50px auto 0 auto;
+	margin: 0 auto;
+}
+
+h1 {
+	width: $header-width;
+}
+
+.memory {
+	padding: 10px;
+	margin-top: 10px;
+	border: 2px solid black;
+}
+
+.form-control {
+	width: $header-width;
+	margin-bottom: $gap;
 }
 
 .timer {
 	padding: 0 10px;
+}
+
+.btn {
+	margin-bottom: $gap;
 }

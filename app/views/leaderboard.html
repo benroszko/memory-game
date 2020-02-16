@@ -9,7 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <title>Memory - Highscores</title>
+    <title>Memory - Leaderboard</title>
 </head>
 <body>
     <script src="/node_modules/firebase/firebase-app.js"></script>
@@ -28,13 +28,13 @@
                 <a class="nav-link">Hard</a>
             </li>
         </ul>
-        <div class="table-responsive" style="display: none">
-            <table class="table table-striped">
+        <div class="table-responsive" style="display: none;">
+            <table class="table">
                 <thead class="thead-dark">
-                    <th>Position</th>
+                    <th style="width: 20%;">Position</th>
                     <th>Name</th>
-                    <th>Time</th>
-                    <th>Date</th>
+                    <th style="width: 20%;">Time</th>
+                    <th style="width: 20%;">Date</th>
                 </thead>
                 <tbody>
                     <tr id="1" >

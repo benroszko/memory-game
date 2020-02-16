@@ -7,9 +7,23 @@ img {
   height: 50px; }
 
 .container {
-  width: 100%;
   padding: 0 15px;
-  margin: 50px auto 0 auto; }
+  margin: 0 auto; }
+
+h1 {
+  width: 464px; }
+
+.memory {
+  padding: 10px;
+  margin-top: 10px;
+  border: 2px solid black; }
+
+.form-control {
+  width: 464px;
+  margin-bottom: 20px; }
 
 .timer {
   padding: 0 10px; }
+
+.btn {
+  margin-bottom: 20px; }

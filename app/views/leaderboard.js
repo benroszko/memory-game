@@ -20,14 +20,12 @@ function displayScores(scores) {
 		emptyTableP.style.display = 'none';
 		trs.forEach((tr) => (tr.style.display = 'none'));
 		trs[0].style.display = 'table-row';
-		for (let i = 1; i <= scores.length; i++) {
-			document.getElementById(i + '').style.display = 'table-row';
-			//trs[i].style.display = 'table-row';
-		}
 		const bestScores = scores.length > 10 ? scores.slice(0, rowsQuantity) : scores;
 		let tr, tdsArr;
 		for (let i = 1; i <= bestScores.length; i++) {
 			tr = document.getElementById(i + '');
+			tr.style.display = 'table-row';
+			//trs[i].style.display = 'table-row';
 			tdsArr = [ ...tr.children ];
 			tdsArr[1].textContent = bestScores[i - 1]['name'];
 			tdsArr[2].textContent = bestScores[i - 1]['time'];
