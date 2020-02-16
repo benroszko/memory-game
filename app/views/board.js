@@ -1,4 +1,4 @@
-import { addScoreToDb } from './dbConnector.js';
+import { addScoreToDb, loadScores } from './dbConnector.js';
 
 const imgMap = new Map();
 let prevImg;
@@ -7,7 +7,7 @@ const guessedImg = '../img/game/guessed.jpg';
 const progressBar = document.getElementsByClassName('progress-bar')[0];
 let timeIntervalId;
 let timeCounter;
-let alreadyGuessed;
+let notGuessedYet;
 
 let uncovered = 0;
 
@@ -41,21 +41,54 @@ function convertToLevel(boardSize) {
 	else return 'HARD';
 }
 
+function resetProgressBar() {
+	progressBar.style.width = progressBar.textContent = '0%';
+}
+
+function destroyAllBoardChildren() {
+	const board = document.getElementsByClassName('board')[0];
+	while (board.firstChild) {
+		board.removeChild(board.firstChild);
+	}
+}
+
+function reloadBoard() {
+	const size = Math.sqrt(imgMap.size);
+	imgMap.clear();
+	destroyAllBoardChildren();
+	loadBoard(size);
+}
+
 function showPlayAgainBtn() {
 	const playAgainBtn = document.getElementById('play-again');
 	playAgainBtn.hidden = false;
 	playAgainBtn.addEventListener('click', () => {
-		//reset progressBar();
-		//clearBoard(); or reloadBorad()
-		loadBoard();
+		resetProgressBar();
+		reloadBoard();
 		loadTimer();
 	});
 }
 
+function resolveSufix(number) {
+	switch (number % 10) {
+		case 1:
+			return 'st';
+		case 2:
+			return 'nd';
+		case 3:
+			return 'rd';
+		default:
+			return 'th';
+	}
+}
+
 function endGame() {
 	clearInterval(timeIntervalId);
-	setTimeout(() => {
-		const promptTxt = `Congratulations! Your time is: ${timeCounter}!\nPlease, enter your name: `;
+	setTimeout(async () => {
+		const scores = await loadScores();
+		const placeInLeaderboard = scores.filter((sc) => sc.time < timeCounter).length + 1;
+		const whichPlace = placeInLeaderboard + resolveSufix(placeInLeaderboard);
+		const promptTxt = `Congratulations! Your time is: ${timeCounter}!\nYou've ended on ${whichPlace} place.\nPlease, enter your name: `;
 		const defaultName = 'Your name...';
 		let playerName;
 		do {
@@ -87,11 +120,10 @@ const setImg = (td, index) => {
 					if (check(img)) {
 						img.src = prevImg.src = guessedImg;
 						cell.guessed = true;
-						console.log(--alreadyGuessed, imgMap.size / 2);
-						const progress = 100 * (1 - alreadyGuessed / (imgMap.size / 2));
-						console.log(progress);
+						console.log(--notGuessedYet, imgMap.size / 2);
+						const progress = 100 * (1 - notGuessedYet / (imgMap.size / 2));
 						progressBar.style.width = progressBar.textContent = progress + '%';
-						if (!alreadyGuessed) {
+						if (!notGuessedYet) {
 							endGame();
 						}
 					} else {
@@ -114,7 +146,7 @@ const createRow = (tr, size, index) => {
 };
 
 function loadBoard(size) {
-	alreadyGuessed = size * size / 2;
+	notGuessedYet = size * size / 2;
 	fillImgMap(size);
 	console.log(imgMap);
 
@@ -128,9 +160,14 @@ function loadBoard(size) {
 }
 
 function loadTimer() {
-	let timer = document.getElementsByClassName('timer')[0];
+	const timer = document.getElementsByClassName('timer')[0];
+	const timerTextContent = 'Time: ';
 	timeCounter = 0;
-	const timerTextContent = 'TIME: ';
+
+	if (timeIntervalId) {
+		clearInterval(timeIntervalId);
+		timer.textContent = timerTextContent + timeCounter;
+	}
 	timer.hidden = false;
 	timeIntervalId = setInterval(() => {
 		timer.textContent = timerTextContent + ++timeCounter;
