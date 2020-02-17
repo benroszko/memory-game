@@ -41,10 +41,10 @@ function displayScores(scores) {
 	}
 }
 
-function changeViewOnNavTabClick(scores) {
-	const navTabs = [ ...document.getElementsByClassName('nav-link') ];
+function changeViewOnNavTabClick(scores, navTabs) {
 	navTabs.forEach((tab) => {
 		tab.addEventListener('click', () => {
+			localStorage.setItem('level', tab.textContent.toUpperCase());
 			const activeOne = navTabs.find((nav) => nav.classList.contains('active'));
 			if (tab !== activeOne) {
 				activeOne.classList.remove('active');
@@ -63,8 +63,12 @@ window.onload = async () => {
 	}, 1000);
 	const scores = await loadFromDb();
 	console.log(scores);
-	changeViewOnNavTabClick(scores);
-	const easyScores = getScoresByLevel(scores, 'EASY');
+	const prevLevel = localStorage.getItem('level') || 'EASY';
+	const navTabs = [ ...document.getElementsByClassName('nav-link') ];
+	navTabs.find((tab) => tab.textContent.toUpperCase() === prevLevel).classList.add('active');
+	console.log(navTabs[0].textContent);
+	changeViewOnNavTabClick(scores, navTabs);
+	const easyScores = getScoresByLevel(scores, prevLevel);
 	console.log(easyScores);
 	displayScores(easyScores);
 };
