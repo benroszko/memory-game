@@ -85,16 +85,17 @@ function resolveSufix(number) {
 function endGame() {
 	clearInterval(timeIntervalId);
 	setTimeout(async () => {
+		let lvl = convertToLevel(Math.sqrt(imgMap.size)),
+			playerName;
 		const scores = await loadScores();
-		const placeInLeaderboard = scores.filter((sc) => sc.time < timeCounter).length + 1;
+		const placeInLeaderboard = scores.filter((sc) => sc.time < timeCounter && sc.level === lvl).length + 1;
 		const whichPlace = placeInLeaderboard + resolveSufix(placeInLeaderboard);
 		const promptTxt = `Congratulations! Your time is: ${timeCounter}!\nYou've ended on ${whichPlace} place.\nPlease, enter your name: `;
 		const defaultName = 'Your name...';
-		let playerName;
 		do {
 			playerName = prompt(promptTxt, defaultName);
 		} while (!playerName || playerName === defaultName);
-		addScoreToDb(playerName, timeCounter, convertToLevel(Math.sqrt(imgMap.size)));
+		await addScoreToDb(playerName, timeCounter, lvl);
 		showPlayAgainBtn();
 	}, 1000);
 }
@@ -121,7 +122,7 @@ const setImg = (td, index) => {
 						img.src = prevImg.src = guessedImg;
 						cell.guessed = true;
 						console.log(--notGuessedYet, imgMap.size / 2);
-						const progress = 100 * (1 - notGuessedYet / (imgMap.size / 2));
+						const progress = (100 * (1 - notGuessedYet / (imgMap.size / 2))).toFixed(2);
 						progressBar.style.width = progressBar.textContent = progress + '%';
 						if (!notGuessedYet) {
 							endGame();

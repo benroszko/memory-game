@@ -21,14 +21,21 @@ function displayScores(scores) {
 		trs.forEach((tr) => (tr.style.display = 'none'));
 		trs[0].style.display = 'table-row';
 		const bestScores = scores.length > 10 ? scores.slice(0, rowsQuantity) : scores;
-		let tr, tdsArr;
+		let tr,
+			tdsArr,
+			prevTime = 0,
+			position = 1;
 		for (let i = 1; i <= bestScores.length; i++) {
 			tr = document.getElementById(i + '');
 			tr.style.display = 'table-row';
-			//trs[i].style.display = 'table-row';
 			tdsArr = [ ...tr.children ];
+
+			if (prevTime !== bestScores[i - 1]['time']) {
+				tdsArr[0].textContent = position;
+			}
+			position++;
 			tdsArr[1].textContent = bestScores[i - 1]['name'];
-			tdsArr[2].textContent = bestScores[i - 1]['time'];
+			tdsArr[2].textContent = prevTime = bestScores[i - 1]['time'];
 			tdsArr[3].textContent = new Date(bestScores[i - 1]['date'].seconds * 1000).toLocaleDateString();
 		}
 	}
