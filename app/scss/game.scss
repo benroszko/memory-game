@@ -1,4 +1,5 @@
 $header-width: 464px;
+$header-hover-color: blue;
 $img-size: 50px;
 $gap: 20px;
 
@@ -17,8 +18,14 @@ img {
 	margin: 0 auto;
 }
 
-h1 {
+.new-game-header {
 	width: $header-width;
+	text-decoration: none;
+
+	&:hover {
+		text-decoration: none;
+		color: $header-hover-color;
+	}
 }
 
 .memory {
@@ -32,8 +39,15 @@ h1 {
 	margin-bottom: $gap;
 }
 
+.timer-div {
+	display: flex;
+}
+
 .timer {
 	padding: 0 10px;
+	margin-left: auto;
+	margin-top: auto;
+	min-width: 330px;
 }
 
 .btn {

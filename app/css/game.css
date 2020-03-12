@@ -10,8 +10,12 @@ img {
   padding: 0 15px;
   margin: 0 auto; }
 
-h1 {
-  width: 464px; }
+.new-game-header {
+  width: 464px;
+  text-decoration: none; }
+  .new-game-header:hover {
+    text-decoration: none;
+    color: blue; }
 
 .memory {
   padding: 10px;
@@ -22,8 +26,14 @@ h1 {
   width: 464px;
   margin-bottom: 20px; }
 
+.timer-div {
+  display: flex; }
+
 .timer {
-  padding: 0 10px; }
+  padding: 0 10px;
+  margin-left: auto;
+  margin-top: auto;
+  min-width: 330px; }
 
 .btn {
   margin-bottom: 20px; }

@@ -56,6 +56,7 @@ function changeViewOnNavTabClick(scores, navTabs) {
 		});
 	});
 }
+
 window.onload = async () => {
 	setTimeout(() => {
 		document.getElementsByClassName('spinner')[0].style.display = 'none';

@@ -1,6 +1,7 @@
 .nav-link {
   display: block;
-  padding: .5rem 1rem; }
+  padding: .5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.05); }
   .nav-link:focus, .nav-link:hover {
     text-decoration: none;
     cursor: pointer; }
@@ -25,10 +26,14 @@ tr:hover {
 tr:active {
   cursor: not-allowed; }
 
-.nav-link {
-  display: block;
-  padding: .5rem 1rem;
-  background-color: rgba(0, 0, 0, 0.05); }
-
 .active {
   background-color: rgba(0, 0, 0, 0.25) !important; }
+
+.col-position {
+  width: 100px !important; }
+
+.col-name {
+  width: 100px; }
+
+.col-time {
+  width: 100px; }
