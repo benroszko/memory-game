@@ -1,32 +1,35 @@
 import { firestore } from './firebase.js';
 
-const collectionName = 'PlayerScores';
+const FIRESTORE = firestore;
 
-function addScoreToDb(player, time, lvl) {
-	let dbObj = {
-		name: player,
-		time: time,
-		level: lvl,
-		date: new Date()
-	};
+export class DbConnector {
+	constructor() {
+		this.collectionName = 'PlayerScores';
+	}
 
-	firestore
-		.collection(collectionName)
-		.add(dbObj)
-		.then(function(docRef) {
-			console.log('Document written with ID: ', docRef.id);
-		})
-		.catch(function(error) {
-			console.error('Error adding document: ', error);
+	addScoreToDb(player, time, lvl) {
+		let dbObj = {
+			name: player,
+			time: time,
+			level: lvl,
+			date: new Date()
+		};
+
+		FIRESTORE.collection(this.collectionName)
+			.add(dbObj)
+			.then((docRef) => {
+				console.log('Document written with ID: ', docRef.id);
+			})
+			.catch((error) => {
+				console.error('Error adding document: ', error);
+			});
+	}
+
+	loadScores() {
+		return FIRESTORE.collection(this.collectionName).get().then((snapshot) => {
+			const scores = [];
+			snapshot.forEach((doc) => scores.push(doc.data()));
+			return scores;
 		});
+	}
 }
-
-function loadScores() {
-	return firestore.collection(collectionName).get().then((snapshot) => {
-		const scores = [];
-		snapshot.forEach((doc) => scores.push(doc.data()));
-		return scores;
-	});
-}
-
-export { addScoreToDb, loadScores };

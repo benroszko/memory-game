@@ -6,7 +6,7 @@ window.onload = () => {
 	let dimension = 0; //number of rows and columns in table
 	console.log(select);
 
-	btn.addEventListener('click', () => {
+	btn.addEventListener('click', async () => {
 		let chosen = true;
 
 		switch (select.value) {
@@ -26,7 +26,7 @@ window.onload = () => {
 
 		if (chosen) {
 			btn.disabled = select.disabled = true;
-			loadBoard(dimension);
+			await loadBoard(dimension);
 			loadTimer();
 		}
 	});

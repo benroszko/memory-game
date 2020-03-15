@@ -1,9 +1,9 @@
-import { loadScores } from './dbConnector.js';
+import { DbConnector } from './DbConnector.js';
 
 const rowsQuantity = 10;
 
 async function loadFromDb() {
-	return await loadScores();
+	return await new DbConnector().loadScores();
 }
 
 function getScoresByLevel(arr, lvl) {

@@ -1,4 +1,4 @@
-import { addScoreToDb, loadScores } from './dbConnector.js';
+import { DbConnector } from './DbConnector.js';
 
 const imgMap = new Map();
 let prevImg;
@@ -8,6 +8,7 @@ const progressBar = document.getElementsByClassName('progress-bar')[0];
 let timeIntervalId;
 let timeCounter;
 let notGuessedYet;
+const dbConnector = new DbConnector();
 
 let uncovered = 0;
 
@@ -82,12 +83,12 @@ function resolveSufix(number) {
 	}
 }
 
-function endGame() {
+async function endGame() {
 	clearInterval(timeIntervalId);
 	setTimeout(async () => {
 		let lvl = convertToLevel(Math.sqrt(imgMap.size)),
 			playerName;
-		const scores = await loadScores();
+		const scores = await dbConnector.loadScores();
 		const placeInLeaderboard = scores.filter((sc) => sc.time < timeCounter && sc.level === lvl).length + 1;
 		const whichPlace = placeInLeaderboard + resolveSufix(placeInLeaderboard);
 		const promptTxt = `Congratulations! Your time is: ${timeCounter}!\nYou've ended on ${whichPlace} place.\nPlease, enter your name: `;
@@ -95,7 +96,7 @@ function endGame() {
 		do {
 			playerName = prompt(promptTxt, defaultName);
 		} while (!playerName || playerName === defaultName);
-		await addScoreToDb(playerName, timeCounter, lvl);
+		await dbConnector.addScoreToDb(playerName, timeCounter, lvl);
 		showPlayAgainBtn();
 	}, 1000);
 }
@@ -117,7 +118,7 @@ const setImg = (td, index) => {
 			} else if (uncovered === 1 && img !== prevImg) {
 				img.src = `${cell.path}`;
 				uncovered++;
-				setTimeout(() => {
+				setTimeout(async () => {
 					if (check(img)) {
 						img.src = prevImg.src = guessedImg;
 						cell.guessed = true;
@@ -125,7 +126,7 @@ const setImg = (td, index) => {
 						const progress = (100 * (1 - notGuessedYet / (imgMap.size / 2))).toFixed(2);
 						progressBar.style.width = progressBar.textContent = progress + '%';
 						if (!notGuessedYet) {
-							endGame();
+							await endGame();
 						}
 					} else {
 						img.src = prevImg.src = coveredImg;
@@ -138,15 +139,15 @@ const setImg = (td, index) => {
 	td.appendChild(img);
 };
 
-const createRow = (tr, size, index) => {
+const createRow = async (tr, size, index) => {
 	for (let i = 1; i <= size; i++) {
 		const td = document.createElement('td');
-		setImg(td, index + i);
+		await setImg(td, index + i);
 		tr.appendChild(td);
 	}
 };
 
-function loadBoard(size) {
+async function loadBoard(size) {
 	notGuessedYet = size * size / 2;
 	fillImgMap(size);
 	console.log(imgMap);
@@ -154,7 +155,7 @@ function loadBoard(size) {
 	const board = document.getElementsByClassName('board')[0];
 	for (let i = 0; i < size; i++) {
 		const tr = document.createElement('tr');
-		createRow(tr, size, i * size);
+		await createRow(tr, size, i * size);
 		board.appendChild(tr);
 	}
 	document.getElementsByClassName('progress')[0].style.display = 'block';
