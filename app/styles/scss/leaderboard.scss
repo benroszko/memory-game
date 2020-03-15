@@ -31,6 +31,14 @@ $col-date-width: 300px;
 	right: calc(50% - (#{$spinner-width} / 2));
 }
 
+.no-display {
+	display: none;
+}
+
+.width-20 {
+	width: 20%;
+}
+
 tr {
 	&:nth-child(even) {
 		background-color: $secondary-color;

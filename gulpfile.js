@@ -3,11 +3,11 @@ const sass = require('gulp-sass');
 
 gulp.task('sass', function() {
 	return gulp
-		.src('app/scss/*.scss')
+		.src('app/styles/scss/*.scss')
 		.pipe(sass()) // Converts Sass to CSS with gulp-sass
-		.pipe(gulp.dest('app/css/'));
+		.pipe(gulp.dest('app/styles/css/'));
 });
 
 gulp.task('default', function() {
-	gulp.watch('app/scss/*.scss', gulp.series([ 'sass' ]));
+	gulp.watch('app/styles/scss/*.scss', gulp.series([ 'sass' ]));
 });

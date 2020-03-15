@@ -1,16 +1,27 @@
+$img-size: 50px;
+$img-gap: 5px;
+
 $header-width: 464px;
 $header-hover-color: blue;
-$img-size: 50px;
-$gap: 20px;
+
+$form-control-gap: 20px;
+
+$min-timer-width: 330px;
 
 th,
 td {
-	margin: 5px;
+	margin: $img-gap;
 }
 
 img {
 	width: $img-size;
 	height: $img-size;
+}
+
+.display-3 {
+	font-size: 4.5rem;
+	font-weight: 100;
+	line-height: 0.9;
 }
 
 .container {
@@ -31,12 +42,12 @@ img {
 .memory {
 	padding: 10px;
 	margin-top: 10px;
-	border: 2px solid black;
 }
 
 .form-control {
 	width: $header-width;
-	margin-bottom: $gap;
+	margin-bottom: $form-control-gap;
+	cursor: pointer;
 }
 
 .timer-div {
@@ -47,9 +58,9 @@ img {
 	padding: 0 10px;
 	margin-left: auto;
 	margin-top: auto;
-	min-width: 330px;
+	min-width: $min-timer-width;
 }
 
 .btn {
-	margin-bottom: $gap;
+	margin-bottom: $form-control-gap;
 }

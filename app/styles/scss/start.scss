@@ -15,7 +15,7 @@ $detail-color: blue;
 	font-weight: 300;
 	line-height: 1.2;
 	text-align: center;
-	border-bottom: 2px solid black;
+	border-bottom: 2px solid $memory-title-color;
 }
 
 .memory-title {
