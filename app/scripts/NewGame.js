@@ -1,4 +1,4 @@
-import { loadBoard, loadTimer } from './board.js';
+import { Memory } from './Memory.js';
 
 window.onload = () => {
 	const select = document.getElementsByClassName('form-control')[0];
@@ -31,8 +31,8 @@ window.onload = () => {
 
 		if (chosen) {
 			btn.disabled = select.disabled = true;
-			await loadBoard(dimension);
-			loadTimer();
+			const memory = new Memory(dimension);
+			await memory.loadBoard();
 		}
 	});
 };
