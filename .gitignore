@@ -1,4 +1,3 @@
 to-do.txt
 node_modules/
 *.json
-app/scripts/firebase.js
