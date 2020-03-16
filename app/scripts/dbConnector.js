@@ -1,10 +1,11 @@
 import { firestore } from './firebase.js';
 
 const FIRESTORE = firestore;
+const COLLECTION_NAME = 'PlayerScores';
 
-export class DbConnector {
-	constructor() {
-		this.collectionName = 'PlayerScores';
+class DbConnector {
+	constructor(collectionName) {
+		this._collectionName = collectionName;
 	}
 
 	addScoreToDb(player, time, lvl) {
@@ -15,7 +16,7 @@ export class DbConnector {
 			date: new Date()
 		};
 
-		FIRESTORE.collection(this.collectionName)
+		FIRESTORE.collection(this._collectionName)
 			.add(dbObj)
 			.then((docRef) => {
 				console.log('Document written with ID: ', docRef.id);
@@ -26,10 +27,14 @@ export class DbConnector {
 	}
 
 	loadScores() {
-		return FIRESTORE.collection(this.collectionName).get().then((snapshot) => {
+		return FIRESTORE.collection(this._collectionName).get().then((snapshot) => {
 			const scores = [];
 			snapshot.forEach((doc) => scores.push(doc.data()));
 			return scores;
 		});
 	}
 }
+
+const DB_CONNECTOR = new DbConnector(COLLECTION_NAME);
+
+export { DB_CONNECTOR };

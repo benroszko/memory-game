@@ -1,26 +1,94 @@
-import { DbConnector } from './DbConnector.js';
+import { DB_CONNECTOR } from './DbConnector.js';
 
-const rowsQuantity = 10;
+const levels = {
+	EASY: 'EASY',
+	MEDIUM: 'MEDIUM',
+	HARD: 'HARD'
+};
 
-async function loadFromDb() {
-	return await new DbConnector().loadScores();
-}
+class Leaderboard {
+	constructor(rowsCount) {
+		this._rowsCount = rowsCount;
+		this._scores = null;
+		this._prevLevel = localStorage.getItem('level') || levels.EASY;
+		this._spinner = document.getElementsByClassName('spinner')[0];
+		this._table = document.getElementsByClassName('table-responsive')[0];
+		this._navTabs = [ ...document.getElementsByClassName('nav-link') ];
+		this._emptyTableP = document.getElementById('empty-table-case');
+		this._trs = [ ...document.getElementsByTagName('tr') ];
 
-function getScoresByLevel(arr, lvl) {
-	return arr.filter((score) => score.level === lvl).sort((a, b) => a.time - b.time);
-}
+		this._setActiveTab();
+		this._changeViewOnNavTabClick();
+	}
 
-function displayScores(scores) {
-	const emptyTableP = document.getElementById('empty-table-case');
-	const trs = [ ...document.getElementsByTagName('tr') ];
-	if (scores.length === 0) {
-		emptyTableP.style.display = 'block';
-		trs.forEach((tr) => (tr.style.display = 'none'));
-	} else {
-		emptyTableP.style.display = 'none';
-		trs.forEach((tr) => (tr.style.display = 'none'));
-		trs[0].style.display = 'table-row';
-		const bestScores = scores.length > 10 ? scores.slice(0, rowsQuantity) : scores;
+	getRowsCount() {
+		return this._rowsCount;
+	}
+
+	getScores() {
+		return this._scores;
+	}
+
+	getPrevLevel() {
+		return this._prevLevel;
+	}
+
+	getNavTabs() {
+		return this._navTabs;
+	}
+
+	setScores(scores) {
+		this._scores = scores;
+	}
+
+	_setActiveTab() {
+		this._navTabs.find((tab) => tab.textContent.toUpperCase() === this._prevLevel).classList.add('active');
+	}
+
+	_getActiveNavTab() {
+		return this._navTabs.find((nav) => nav.classList.contains('active'));
+	}
+
+	_setNewActiveTab(oldActive, newActive) {
+		oldActive.classList.remove('active');
+		newActive.classList.add('active');
+		const activeScores = getScoresByLevel(this._scores, newActive.textContent.toUpperCase());
+		this.displayScores(activeScores);
+	}
+
+	_changeViewOnNavTabClick() {
+		this._navTabs.forEach((tab) => {
+			tab.addEventListener('click', () => {
+				localStorage.setItem('level', tab.textContent.toUpperCase());
+				const activeOne = this._getActiveNavTab();
+				if (tab !== activeOne) {
+					this._setNewActiveTab(activeOne, tab);
+				}
+			});
+		});
+	}
+
+	async loadData() {
+		this._scores = await DB_CONNECTOR.loadScores();
+	}
+
+	removeSpinner() {
+		this._spinner.style.display = 'none';
+		this._table.style.display = 'block';
+	}
+
+	_emptyTableCase() {
+		this._emptyTableP.style.display = 'block';
+		this._trs.forEach((tr) => (tr.style.display = 'none'));
+	}
+
+	_setTableCssClasses() {
+		this._emptyTableP.style.display = 'none';
+		this._trs.forEach((tr) => (tr.style.display = 'none'));
+		this._trs[0].style.display = 'table-row';
+	}
+
+	_fillTable(bestScores) {
 		let tr,
 			tdsArr,
 			prevTime = 0,
@@ -39,37 +107,32 @@ function displayScores(scores) {
 			tdsArr[3].textContent = new Date(bestScores[i - 1]['date'].seconds * 1000).toLocaleDateString();
 		}
 	}
+
+	_nonEmptyTableCase(scores) {
+		this._setTableCssClasses();
+		const bestScores = scores.length > 10 ? scores.slice(0, this._rowsCount) : scores;
+		this._fillTable(bestScores);
+	}
+
+	displayScores(scores) {
+		if (scores.length === 0) {
+			this._emptyTableCase();
+		} else {
+			this._nonEmptyTableCase(scores);
+		}
+	}
 }
 
-function changeViewOnNavTabClick(scores, navTabs) {
-	navTabs.forEach((tab) => {
-		tab.addEventListener('click', () => {
-			localStorage.setItem('level', tab.textContent.toUpperCase());
-			const activeOne = navTabs.find((nav) => nav.classList.contains('active'));
-			if (tab !== activeOne) {
-				activeOne.classList.remove('active');
-				tab.classList.add('active');
-				const activeScores = getScoresByLevel(scores, tab.textContent.toUpperCase());
-				console.log(activeScores);
-				displayScores(activeScores);
-			}
-		});
-	});
+function getScoresByLevel(arr, lvl) {
+	return arr.filter((score) => score.level === lvl).sort((a, b) => a.time - b.time);
 }
 
 window.onload = async () => {
+	const leaderboard = new Leaderboard(10);
 	setTimeout(() => {
-		document.getElementsByClassName('spinner')[0].style.display = 'none';
-		document.getElementsByClassName('table-responsive')[0].style.display = 'block';
+		leaderboard.removeSpinner();
 	}, 1000);
-	const scores = await loadFromDb();
-	console.log(scores);
-	const prevLevel = localStorage.getItem('level') || 'EASY';
-	const navTabs = [ ...document.getElementsByClassName('nav-link') ];
-	navTabs.find((tab) => tab.textContent.toUpperCase() === prevLevel).classList.add('active');
-	console.log(navTabs[0].textContent);
-	changeViewOnNavTabClick(scores, navTabs);
-	const easyScores = getScoresByLevel(scores, prevLevel);
-	console.log(easyScores);
-	displayScores(easyScores);
+	await leaderboard.loadData();
+	const scores = getScoresByLevel(leaderboard.getScores(), leaderboard.getPrevLevel());
+	leaderboard.displayScores(scores);
 };

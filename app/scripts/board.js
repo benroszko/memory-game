@@ -1,4 +1,4 @@
-import { DbConnector } from './DbConnector.js';
+import { DB_CONNECTOR } from './DbConnector.js';
 
 const imgMap = new Map();
 let prevImg;
@@ -8,7 +8,6 @@ const progressBar = document.getElementsByClassName('progress-bar')[0];
 let timeIntervalId;
 let timeCounter;
 let notGuessedYet;
-const dbConnector = new DbConnector();
 
 let uncovered = 0;
 
@@ -88,7 +87,7 @@ async function endGame() {
 	setTimeout(async () => {
 		let lvl = convertToLevel(Math.sqrt(imgMap.size)),
 			playerName;
-		const scores = await dbConnector.loadScores();
+		const scores = await DB_CONNECTOR.loadScores();
 		const placeInLeaderboard = scores.filter((sc) => sc.time < timeCounter && sc.level === lvl).length + 1;
 		const whichPlace = placeInLeaderboard + resolveSufix(placeInLeaderboard);
 		const promptTxt = `Congratulations! Your time is: ${timeCounter}!\nYou've ended on ${whichPlace} place.\nPlease, enter your name: `;
@@ -96,7 +95,7 @@ async function endGame() {
 		do {
 			playerName = prompt(promptTxt, defaultName);
 		} while (!playerName || playerName === defaultName);
-		await dbConnector.addScoreToDb(playerName, timeCounter, lvl);
+		await DB_CONNECTOR.addScoreToDb(playerName, timeCounter, lvl);
 		showPlayAgainBtn();
 	}, 1000);
 }
